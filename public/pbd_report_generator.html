@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Laporan Pentaksiran Bilik Darjah (PBD) - SMK Universal Hua Xia</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0284c7;
+            --primary-dark: #0369a1;
+            --bg-page: #f8fafc;
+            --bg-card: #ffffff;
+            --text-heading: #0f172a;
+            --text-body: #334155;
+            --text-muted: #64748b;
+            --border-light: #e2e8f0;
+            --border-dark: #94a3b8;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-page);
+            color: var(--text-body);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Top Header */
+        header.app-header {
+            background: #ffffff;
+            border-bottom: 1px solid var(--border-light);
+            padding: 12px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+
+        .header-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .crest-icon-sm {
+            width: 36px;
+            height: 36px;
+            background: #0f172a;
+            color: #ffffff;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 0.9rem;
+        }
+
+        .header-title h1 {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: var(--text-heading);
+            letter-spacing: -0.01em;
+        }
+
+        .header-subtitle {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            border: 1px solid transparent;
+            transition: all 0.15s ease;
+        }
+
+        .btn-primary {
+            background-color: #0f172a;
+            color: #ffffff;
+        }
+
+        .btn-primary:hover {
+            background-color: #1e293b;
+        }
+
+        .btn-secondary {
+            background-color: #ffffff;
+            color: #0f172a;
+            border-color: var(--border-light);
+        }
+
+        .btn-secondary:hover {
+            background-color: #f1f5f9;
+        }
+
+        /* Main Layout */
+        .workspace-layout {
+            display: flex;
+            flex: 1;
+            height: calc(100vh - 61px);
+            overflow: hidden;
+        }
+
+        /* Sidebar */
+        aside.student-sidebar {
+            width: 330px;
+            background: #ffffff;
+            border-right: 1px solid var(--border-light);
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+        }
+
+        .sidebar-search-box {
+            padding: 14px 16px;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 8px 12px;
+            border-radius: 6px;
+            border: 1px solid var(--border-light);
+            font-size: 0.85rem;
+            outline: none;
+            transition: border-color 0.15s;
+        }
+
+        .search-input:focus {
+            border-color: var(--primary);
+        }
+
+        .student-count-bar {
+            padding: 8px 16px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+            background: #f8fafc;
+            border-bottom: 1px solid var(--border-light);
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .student-list {
+            flex: 1;
+            overflow-y: auto;
+            padding: 8px;
+        }
+
+        .student-card {
+            padding: 10px 12px;
+            border-radius: 6px;
+            margin-bottom: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border: 1px solid transparent;
+            transition: all 0.15s ease;
+        }
+
+        .student-card:hover {
+            background-color: #f8fafc;
+            border-color: var(--border-light);
+        }
+
+        .student-card.active {
+            background-color: #f0fdf4;
+            border-color: #bbf7d0;
+        }
+
+        .student-info-left {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .student-name {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-heading);
+        }
+
+        .student-meta {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .tp-badge {
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 2px 8px;
+            border-radius: 4px;
+            background: #e2e8f0;
+            color: #334155;
+        }
+
+        .tp-badge.tp-5, .tp-badge.tp-6 {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .tp-badge.tp-4 {
+            background: #e0f2fe;
+            color: #0369a1;
+        }
+
+        .tp-badge.tp-3 {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        /* Report Canvas */
+        main.report-canvas {
+            flex: 1;
+            overflow-y: auto;
+            padding: 32px;
+            display: flex;
+            justify-content: center;
+            background-color: #f1f5f9;
+        }
+
+        .report-sheet {
+            background: #ffffff;
+            width: 100%;
+            max-width: 820px;
+            min-height: 1100px;
+            padding: 40px 48px;
+            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.06), 0 8px 10px -6px rgba(0,0,0,0.04);
+            border-radius: 4px;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        /* Report Sheet Header */
+        .official-header {
+            text-align: center;
+            padding-bottom: 18px;
+            border-bottom: 2px solid #0f172a;
+            margin-bottom: 20px;
+        }
+
+        .crest-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 44px;
+            height: 44px;
+            margin-bottom: 8px;
+            background: #0f172a;
+            color: #ffffff;
+            border-radius: 8px;
+            font-weight: 800;
+            font-size: 1.1rem;
+        }
+
+        .official-kpm-title {
+            font-size: 0.78rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            color: #475569;
+            text-transform: uppercase;
+            margin-bottom: 4px;
+        }
+
+        .official-school-name {
+            font-size: 1.35rem;
+            font-weight: 800;
+            color: #0f172a;
+            letter-spacing: -0.01em;
+            margin-bottom: 4px;
+        }
+
+        .official-address {
+            font-size: 0.8rem;
+            color: #64748b;
+            margin-bottom: 12px;
+        }
+
+        .report-doc-title {
+            display: inline-block;
+            background: #0f172a;
+            color: #ffffff;
+            font-size: 0.85rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            padding: 4px 18px;
+            border-radius: 4px;
+        }
+
+        /* Student Particulars Table */
+        .particulars-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px 24px;
+            background: #f8fafc;
+            border: 1px solid var(--border-light);
+            border-radius: 6px;
+            padding: 14px 18px;
+            margin-bottom: 20px;
+            font-size: 0.82rem;
+        }
+
+        .particulars-item {
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px dashed #e2e8f0;
+            padding-bottom: 4px;
+        }
+
+        .p-label {
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .p-value {
+            font-weight: 700;
+            color: var(--text-heading);
+            text-align: right;
+        }
+
+        /* Modules Table */
+        .modules-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            font-size: 0.82rem;
+        }
+
+        .modules-table th, .modules-table td {
+            border: 1px solid #cbd5e1;
+            padding: 7px 10px;
+            vertical-align: middle;
+        }
+
+        .modules-table th {
+            background-color: #f1f5f9;
+            font-weight: 700;
+            text-align: left;
+            color: #1e293b;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+        }
+
+        .col-center {
+            text-align: center !important;
+        }
+
+        .col-tp-box {
+            width: 60px;
+            text-align: center;
+            font-size: 0.95rem;
+            font-weight: 800;
+            background: #ffffff;
+        }
+
+        .desc-text {
+            font-size: 0.78rem;
+            color: #475569;
+            line-height: 1.35;
+        }
+
+        /* Overall TP Section */
+        .overall-banner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border: 2px solid #0f172a;
+            background: #f8fafc;
+            border-radius: 6px;
+            padding: 12px 18px;
+            margin-bottom: 18px;
+        }
+
+        .overall-left h3 {
+            font-size: 0.9rem;
+            font-weight: 800;
+            color: #0f172a;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+
+        .overall-left p {
+            font-size: 0.75rem;
+            color: #64748b;
+        }
+
+        .overall-tp-badge {
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: #0f172a;
+            background: #ffffff;
+            border: 2px solid #0f172a;
+            width: 48px;
+            height: 48px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Teacher Remarks Section */
+        .remarks-box {
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            padding: 12px 16px;
+            margin-bottom: 22px;
+            background: #ffffff;
+        }
+
+        .remarks-title {
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: #475569;
+            letter-spacing: 0.05em;
+            margin-bottom: 4px;
+        }
+
+        .remarks-content {
+            font-size: 0.82rem;
+            line-height: 1.45;
+            color: #1e293b;
+            font-style: italic;
+        }
+
+        /* Signatures Grid */
+        .signatures-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-top: auto;
+            padding-top: 18px;
+            border-top: 1px solid var(--border-light);
+        }
+
+        .signature-item {
+            text-align: center;
+        }
+
+        .signature-line {
+            height: 44px;
+            border-bottom: 1px solid #0f172a;
+            margin-bottom: 6px;
+        }
+
+        .signature-name {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: #0f172a;
+            text-transform: uppercase;
+        }
+
+        .signature-role {
+            font-size: 0.68rem;
+            color: #64748b;
+        }
+
+        /* Print Specific Styling */
+        @media print {
+            @page {
+                size: A4 portrait;
+                margin: 10mm 12mm 10mm 12mm;
+            }
+
+            body {
+                background: #ffffff !important;
+                color: #000000 !important;
+            }
+
+            header.app-header,
+            aside.student-sidebar {
+                display: none !important;
+            }
+
+            .workspace-layout {
+                display: block !important;
+                height: auto !important;
+                overflow: visible !important;
+            }
+
+            main.report-canvas {
+                padding: 0 !important;
+                background: #ffffff !important;
+                display: block !important;
+            }
+
+            .report-sheet {
+                box-shadow: none !important;
+                border: none !important;
+                border-radius: 0 !important;
+                padding: 0 !important;
+                max-width: 100% !important;
+                width: 100% !important;
+                page-break-after: always;
+                break-after: page;
+            }
+
+            .report-sheet:last-child {
+                page-break-after: auto;
+                break-after: auto;
+            }
+
+            * {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="app-header">
+        <div class="header-title">
+            <div class="crest-icon-sm">HX</div>
+            <div>
+                <h1>SEKOLAH MENENGAH UNIVERSAL HUA XIA</h1>
+                <div class="header-subtitle">4 POLITE • PRINSIP PERAKAUNAN • 2026</div>
+            </div>
+        </div>
+        <div class="header-actions">
+            <button class="btn btn-secondary" onclick="printAllReports()">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9V2h12v7M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+                Cetak Semua (24 Murid)
+            </button>
+            <button class="btn btn-primary" onclick="window.print()">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9V2h12v7M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+                Cetak Laporan Murid
+            </button>
+        </div>
+    </header>
+
+    <div class="workspace-layout">
+        <aside class="student-sidebar">
+            <div class="sidebar-search-box">
+                <input type="text" id="searchInput" class="search-input" placeholder="Cari nama atau No. KP..." oninput="handleSearch(this.value)">
+            </div>
+            <div class="student-count-bar">
+                <span>Senarai Murid</span>
+                <span id="studentCountText">24 Murid</span>
+            </div>
+            <div class="student-list" id="studentListContainer">
+                <!-- Dynamically populated -->
+            </div>
+        </aside>
+
+        <main class="report-canvas">
+            <div id="reportSheet" class="report-sheet">
+                <!-- Dynamically populated -->
+            </div>
+        </main>
+    </div>
+
+    <div id="batchPrintContainer" style="display: none;"></div>
+
+    <script>
+        const db = {
+            metadata: {
+                ministryHeader: "KEMENTERIAN PENDIDIKAN MALAYSIA",
+                school: "SEKOLAH MENENGAH UNIVERSAL HUA XIA",
+                address: "WISMA HUA XIA, JALAN SERI KEMBANGAN",
+                state: "SERI KEMBANGAN, SELANGOR",
+                date: "04/11/2026",
+                subject: "PRINSIP PERAKAUNAN",
+                subjectCode: "3756",
+                teacher: "PN. NORSUZALINA BINTI MOHD SHAFIE",
+                teacherDesignation: "Guru Mata Pelajaran",
+                principal: "EN. KAMARUL ZAMAN BIN AHMAD",
+                principalDesignation: "Pengetua / Guru Kanan",
+                class: "4 POLITE",
+                academicYear: "2026",
+                assessmentTerm: "Pentaksiran Akhir Sesi Akademik (PASA)"
+            },
+            modules: [
+                { id: 1, code: "MODUL 1.0", title: "Pengenalan kepada Perakaunan", desc: "Mengingat & mengaplikasi konsep asas serta etika perakaunan." },
+                { id: 2, code: "MODUL 2.0", title: "Klasifikasi Akaun dan Persamaan Perakaunan", desc: "Mengelaskan aset, liabiliti, ekuiti dan mengira kesan urus niaga." },
+                { id: 3, code: "MODUL 3.0", title: "Dokumen Perniagaan Sebagai Sumber Maklumat", desc: "Menganalisis invois, resit, nota debit/kredit dan aliran transaksi." },
+                { id: 4, code: "MODUL 4.0", title: "Buku Catatan Pertama", desc: "Merekod dalam Jurnal Am, Jurnal Khas dan Buku Tunai Runcit." },
+                { id: 5, code: "MODUL 5.0", title: "Lejar", desc: "Membuat catatan bergu, mengepos ke lejar dan mengimbang akaun." },
+                { id: 6, code: "MODUL 6.0", title: "Imbangan Duga", desc: "Menyediakan Imbangan Duga dan mengesan kesilapan perakaunan." },
+                { id: 7, code: "MODUL 7.0", title: "Penyata Kewangan Milikan Tunggal Tanpa Pelarasan", desc: "Menyediakan Akaun Perdagangan, Untung Rugi dan Penyata Kedudukan Kewangan." },
+                { id: 8, code: "MODUL 8.0", title: "Pelarasan pada Tarikh Imbangan & Penyata Kewangan", desc: "Merekod pelarasan akruan, susut nilai dan menyediakan PKK terselaras." },
+                { id: 9, code: "MODUL 9.0", title: "Pembetulan Kesilapan", desc: "Membetulkan ralat melalui Jurnal Am dan Akaun Tergantung." }
+            ],
+            students: [
+                { id: 1, name: "CHANG POO YEW", ic: "100719-14-0951", gender: "L", modules: [3, 4, 3, 3, 3, 5, 4, 4, 4], overall: 4 },
+                { id: 2, name: "CHEN YU QIAN", ic: "101005-10-0813", gender: "L", modules: [3, 3, 3, 3, 3, 4, 3, 3, 3], overall: 3 },
+                { id: 3, name: "CHEONG EXIN", ic: "100310-14-0884", gender: "P", modules: [3, 4, 3, 5, 5, 5, 5, 5, 5], overall: 5 },
+                { id: 4, name: "CHIN WEE KI", ic: "100510-10-1994", gender: "P", modules: [3, 4, 4, 5, 5, 5, 5, 5, 5], overall: 5 },
+                { id: 5, name: "DARIUS VOON VANE YITT", ic: "100818-01-1389", gender: "L", modules: [3, 3, 3, 3, 4, 5, 4, 4, 4], overall: 4 },
+                { id: 6, name: "FOONG HUI XIN", ic: "100112-10-2342", gender: "P", modules: [3, 3, 3, 4, 5, 5, 5, 4, 4], overall: 5 },
+                { id: 7, name: "KHAW XIN YU", ic: "100712-14-0414", gender: "P", modules: [3, 4, 3, 4, 4, 4, 4, 4, 4], overall: 3 },
+                { id: 8, name: "KHOO KAI FENG", ic: "101106-10-1145", gender: "L", modules: [3, 4, 4, 5, 5, 5, 5, 5, 5], overall: 5 },
+                { id: 9, name: "LAU HUI MING", ic: "100509-16-0057", gender: "L", modules: [3, 3, 3, 4, 5, 5, 4, 4, 4], overall: 5 },
+                { id: 10, name: "LOW YAN FUNG", ic: "100608-10-2741", gender: "L", modules: [3, 3, 3, 4, 4, 5, 3, 3, 3], overall: 4 },
+                { id: 11, name: "MARCUS TAN CHEE JIE", ic: "100206-14-0665", gender: "L", modules: [3, 4, 3, 4, 4, 5, 4, 4, 4], overall: 4 },
+                { id: 12, name: "NGEOW KAI YEE", ic: "100611-14-0802", gender: "P", modules: [3, 4, 3, 4, 4, 5, 5, 5, 5], overall: 5 },
+                { id: 13, name: "RYAN CHAN WEI HAO", ic: "100602-05-0127", gender: "L", modules: [3, 3, 3, 3, 3, 4, 4, 4, 4], overall: 4 },
+                { id: 14, name: "SOON YI HONG", ic: "100419-10-2283", gender: "L", modules: [3, 4, 4, 5, 5, 5, 5, 5, 5], overall: 5 },
+                { id: 15, name: "TAN JING HOONG", ic: "101101-10-0055", gender: "L", modules: [3, 3, 3, 3, 3, 4, 3, 3, 3], overall: 3 },
+                { id: 16, name: "TAN XIN LE", ic: "100928-14-0886", gender: "P", modules: [3, 4, 4, 5, 5, 5, 5, 5, 5], overall: 5 },
+                { id: 17, name: "THAN KING KAI", ic: "101217-10-0989", gender: "L", modules: [3, 3, 3, 4, 5, 5, 4, 4, 4], overall: 4 },
+                { id: 18, name: "WONG JUN YAP", ic: "100830-10-1897", gender: "L", modules: [3, 3, 3, 3, 3, 3, 3, 3, 3], overall: 3 },
+                { id: 19, name: "WONG YI HSIEN", ic: "100415-16-0291", gender: "L", modules: [3, 4, 4, 5, 5, 5, 5, 5, 5], overall: 5 },
+                { id: 20, name: "WOO WEN XUAN", ic: "100407-10-2809", gender: "L", modules: [3, 3, 3, 4, 4, 5, 4, 4, 4], overall: 4 },
+                { id: 21, name: "YAP JOVAN", ic: "101008-14-1207", gender: "L", modules: [3, 4, 4, 5, 5, 5, 5, 5, 5], overall: 5 },
+                { id: 22, name: "YAW YIK THONG", ic: "101008-10-2152", gender: "P", modules: [3, 4, 3, 4, 4, 5, 5, 5, 5], overall: 5 },
+                { id: 23, name: "YUEN SONG WEI", ic: "100807-14-3693", gender: "L", modules: [3, 4, 3, 4, 5, 5, 5, 5, 5], overall: 5 },
+                { id: 24, name: "KEITH CHOW MING ZE", ic: "100323-14-0891", gender: "L", modules: ["-", "-", "-", "-", "-", "-", "-", "-", 3], overall: 3 }
+            ]
+        };
+
+        let activeStudentId = 1;
+        let searchList = [...db.students];
+
+        function getRemark(tp) {
+            const n = Number(tp);
+            if (n >= 5) return "Syabas dan tahniah! Murid menunjukkan kefahaman yang sangat mantap dan berupaya menyelesaikan tugasan perakaunan secara sistematik dan berintegriti.";
+            if (n === 4) return "Pencapaian yang baik. Murid menguasai konsep dan tatacara perekodan. Teruskan usaha dan perbanyakkan latihan untuk mencapai tahap cemerlang.";
+            return "Murid mencapai tahap penguasaan minimum. Perlu melipatgandakan latihan kendiri serta bimbingan guru terutama dalam penyediaan lejar dan penyata kewangan.";
+        }
+
+        function renderStudentList() {
+            const listEl = document.getElementById('studentListContainer');
+            listEl.innerHTML = '';
+            searchList.forEach(student => {
+                const el = document.createElement('div');
+                el.className = 'student-card' + (student.id === activeStudentId ? ' active' : '');
+                el.onclick = () => {
+                    activeStudentId = student.id;
+                    renderStudentList();
+                    renderReport(student);
+                };
+                el.innerHTML = \`
+                    <div class="student-info-left">
+                        <span class="student-name">\${student.id}. \${student.name}</span>
+                        <span class="student-meta">\${student.ic} · \${student.gender === 'L' ? 'Lelaki' : 'Perempuan'}</span>
+                    </div>
+                    <span class="tp-badge tp-\${student.overall}">TP \${student.overall}</span>
+                \`;
+                listEl.appendChild(el);
+            });
+            document.getElementById('studentCountText').innerText = searchList.length + ' Murid';
+        }
+
+        function handleSearch(q) {
+            const term = q.toLowerCase().trim();
+            if (!term) {
+                searchList = [...db.students];
+            } else {
+                searchList = db.students.filter(s => 
+                    s.name.toLowerCase().includes(term) || 
+                    s.ic.toLowerCase().includes(term) ||
+                    String(s.overall) === term
+                );
+            }
+            renderStudentList();
+            if (searchList.length > 0 && !searchList.some(s => s.id === activeStudentId)) {
+                activeStudentId = searchList[0].id;
+                renderReport(searchList[0]);
+            }
+        }
+
+        function buildSheetHtml(student) {
+            const meta = db.metadata;
+            let rows = '';
+            student.modules.forEach((score, idx) => {
+                const mod = db.modules[idx];
+                rows += \`
+                    <tr>
+                        <td class="col-center" style="font-weight: 600; width: 40px;">\${idx + 1}</td>
+                        <td style="width: 250px;">
+                            <div style="font-weight: 700; color: #0f172a;">\${mod.code}</div>
+                            <div style="color: #475569; font-size: 0.78rem;">\${mod.title}</div>
+                        </td>
+                        <td class="col-tp-box">\${score !== '' ? score : '-'}</td>
+                        <td class="desc-text">\${mod.desc}</td>
+                    </tr>
+                \`;
+            });
+
+            return \`
+                <div class="official-header">
+                    <div class="crest-icon">HX</div>
+                    <div class="official-kpm-title">\${meta.ministryHeader}</div>
+                    <h2 class="official-school-name">\${meta.school}</h2>
+                    <div class="official-address">\${meta.address}, \${meta.state}</div>
+                    <div class="report-doc-title">LAPORAN PENTAKSIRAN BILIK DARJAH (PBD) AKADEMIK</div>
+                </div>
+
+                <div class="particulars-grid">
+                    <div class="particulars-item">
+                        <span class="p-label">Nama Murid:</span>
+                        <span class="p-value">\${student.name}</span>
+                    </div>
+                    <div class="particulars-item">
+                        <span class="p-label">No. Kad Pengenalan / MyKid:</span>
+                        <span class="p-value">\${student.ic}</span>
+                    </div>
+                    <div class="particulars-item">
+                        <span class="p-label">Tingkatan / Kelas:</span>
+                        <span class="p-value">\${meta.class}</span>
+                    </div>
+                    <div class="particulars-item">
+                        <span class="p-label">Jantina:</span>
+                        <span class="p-value">\${student.gender === 'L' ? 'Lelaki (L)' : 'Perempuan (P)'}</span>
+                    </div>
+                    <div class="particulars-item">
+                        <span class="p-label">Mata Pelajaran:</span>
+                        <span class="p-value">\${meta.subject} (\${meta.subjectCode})</span>
+                    </div>
+                    <div class="particulars-item">
+                        <span class="p-label">Tarikh Penilaian:</span>
+                        <span class="p-value">\${meta.date}</span>
+                    </div>
+                    <div class="particulars-item">
+                        <span class="p-label">Guru Mata Pelajaran:</span>
+                        <span class="p-value">\${meta.teacher}</span>
+                    </div>
+                    <div class="particulars-item">
+                        <span class="p-label">Sesi Persekolahan:</span>
+                        <span class="p-value">\${meta.academicYear} · \${meta.assessmentTerm}</span>
+                    </div>
+                </div>
+
+                <table class="modules-table">
+                    <thead>
+                        <tr>
+                            <th class="col-center">No</th>
+                            <th>Standard Prestasi / Modul Pembelajaran</th>
+                            <th class="col-center">TP</th>
+                            <th>Tafsiran Prestasi Standard Kandungan</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        \${rows}
+                    </tbody>
+                </table>
+
+                <div class="overall-banner">
+                    <div class="overall-left">
+                        <h3>Tahap Penguasaan Keseluruhan (Overall TP)</h3>
+                        <p>Penilaian keseluruhan berasaskan pencapaian standard kandungan kurikulum kebangsaan (KSSM).</p>
+                    </div>
+                    <div class="overall-tp-badge">
+                        \${student.overall}
+                    </div>
+                </div>
+
+                <div class="remarks-box">
+                    <div class="remarks-title">Ulasan Guru Mata Pelajaran</div>
+                    <div class="remarks-content">"\${getRemark(student.overall)}"</div>
+                </div>
+
+                <div class="signatures-grid">
+                    <div class="signature-item">
+                        <div class="signature-line"></div>
+                        <div class="signature-name">\${meta.teacher}</div>
+                        <div class="signature-role">\${meta.teacherDesignation}</div>
+                    </div>
+                    <div class="signature-item">
+                        <div class="signature-line"></div>
+                        <div class="signature-name">\${meta.principal}</div>
+                        <div class="signature-role">\${meta.principalDesignation}</div>
+                    </div>
+                    <div class="signature-item">
+                        <div class="signature-line"></div>
+                        <div class="signature-name">Tandatangan Ibu Bapa / Penjaga</div>
+                        <div class="signature-role">Tarikh: .......................................</div>
+                    </div>
+                </div>
+            \`;
+        }
+
+        function renderReport(student) {
+            document.getElementById('reportSheet').innerHTML = buildSheetHtml(student);
+        }
+
+        function printAllReports() {
+            const printBox = document.getElementById('batchPrintContainer');
+            printBox.innerHTML = '';
+            db.students.forEach(s => {
+                const page = document.createElement('div');
+                page.className = 'report-sheet';
+                page.innerHTML = buildSheetHtml(s);
+                printBox.appendChild(page);
+            });
+
+            const main = document.querySelector('.workspace-layout');
+            main.style.display = 'none';
+            printBox.style.display = 'block';
+
+            window.print();
+
+            setTimeout(() => {
+                main.style.display = 'flex';
+                printBox.style.display = 'none';
+            }, 600);
+        }
+
+        renderStudentList();
+        renderReport(db.students[0]);
+    </script>
+</body>
+</html>
